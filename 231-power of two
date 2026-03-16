@@ -1,0 +1,18 @@
+class Solution {
+public:
+    bool isPowerOfTwo(int n) {
+        if (n <= 0) return false;
+
+        int ans = 0;
+        int power = 0;
+
+        while (power <= 30 && ans <= n) { 
+            ans = pow(2, power);
+            power++;
+            if (ans == n) {
+                return true;
+            }
+        }
+        return false;
+    }
+};
