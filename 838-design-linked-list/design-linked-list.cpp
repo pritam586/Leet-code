@@ -45,9 +45,9 @@ public:
             prev = prev->next;
         }
 
-        Node* newNode = new Node(val);  
-        newNode->next = prev->next;
-        prev->next = newNode;
+        Node* temp = new Node(val);  
+        temp->next = prev->next;
+        prev->next = temp;
 
         size++;  
     }
@@ -60,10 +60,10 @@ public:
             prev = prev->next;
         }
 
-        Node* toDelete = prev->next;
-        prev->next = toDelete->next;
+        Node* temp = prev->next;
+        prev->next = temp->next;
 
-        delete toDelete; 
+        delete temp; 
         size--;           
     }
 };
