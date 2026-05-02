@@ -1,0 +1,27 @@
+class Solution {
+public:
+    int cal(vector<int>& prices , int idx , int buy ,int n, vector<vector<int>>& dp){
+        if(idx>=n) return 0;
+
+        int profit = 0;
+        if(dp[idx][buy]!=-1) return dp[idx][buy];
+
+        if(buy){
+            profit = max(
+                -prices[idx]+cal(prices ,idx+1, 0 , n,dp ),
+                cal(prices ,idx+1, 1 , n,dp )
+                );
+        }else{
+            profit = max(
+                prices[idx]+cal(prices ,idx+2, 1 , n,dp ),
+                cal(prices ,idx+1, 0 , n,dp )
+                );
+        }
+        return dp[idx][buy] = profit;
+    }
+    int maxProfit(vector<int>& prices) {
+        int n = prices.size();
+        vector<vector<int>> dp(n , vector<int>(2 , -1));
+        return cal(prices , 0 , 1 ,n, dp);
+    }
+};
