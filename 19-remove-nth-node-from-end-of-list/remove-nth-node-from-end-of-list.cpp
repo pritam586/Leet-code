@@ -36,9 +36,9 @@ public:
             curr = curr->next;
         }
 
-        ListNode* delNode = curr->next;
+        //ListNode* delNode = curr->next;
 
-        curr->next = delNode->next;
+        curr->next = curr->next->next;
 
         return head;
     }
