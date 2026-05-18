@@ -11,33 +11,68 @@
  */
  class Solution {
 public:
-    int search(vector<int>& inorder, int left, int right, int val) {
-        for (int i = left; i <= right; i++) {
-            if (inorder[i] == val) return i;
+
+    int search(vector<int>& inorder,
+               int left,
+               int right,
+               int val) {
+
+        for(int i = left; i <= right; i++) {
+
+            if(inorder[i] == val) {
+                return i;
+            }
         }
+
         return -1;
     }
 
-    TreeNode* solve(vector<int>& preorder, vector<int>& inorder, int &preIndex, int left, int right) {
-        if (left > right) return nullptr;
+    TreeNode* solve(vector<int>& preorder,
+                    vector<int>& inorder,
+                    int left,
+                    int right,
+                    int& preInd) {
 
-        TreeNode* root = new TreeNode(preorder[preIndex]);
+        if(left > right) {
+            return NULL;
+        }
 
-        int inIndex = search(inorder, left, right, preorder[preIndex]);
+        // root from preorder
+        TreeNode* root = new TreeNode(preorder[preInd]);
 
-        preIndex++;
+        int inIndex = search(inorder,
+                             left,
+                             right,
+                             preorder[preInd]);
 
-        root->left = solve(preorder, inorder, preIndex, left, inIndex - 1);
-        root->right = solve(preorder, inorder, preIndex, inIndex + 1, right);
+        preInd++;
+
+        // build LEFT first
+        root->left = solve(preorder,
+                           inorder,
+                           left,
+                           inIndex - 1,
+                           preInd);
+
+        // build RIGHT
+        root->right = solve(preorder,
+                            inorder,
+                            inIndex + 1,
+                            right,
+                            preInd);
 
         return root;
     }
 
-    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
-        int preIndex = 0;
+    TreeNode* buildTree(vector<int>& preorder,
+                        vector<int>& inorder) {
 
-        TreeNode* root = solve(preorder, inorder, preIndex, 0, inorder.size() - 1);
+        int preInd = 0;
 
-        return root;
+        return solve(preorder,
+                     inorder,
+                     0,
+                     inorder.size() - 1,
+                     preInd);
     }
 };
