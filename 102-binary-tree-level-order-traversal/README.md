@@ -10,6 +10,7 @@
 
 <p><strong class="example">Example 2:</strong></p>
 
+
 <pre>
 <strong>Input:</strong> root = [1]
 <strong>Output:</strong> [[1]]
@@ -21,6 +22,7 @@
 <strong>Input:</strong> root = []
 <strong>Output:</strong> []
 </pre>
+
 th
 <p>&nbsp;</p>
 <p><strong>Constraints:</strong></p>
