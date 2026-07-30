@@ -1,47 +1,41 @@
 class Solution {
 public:
-    vector<int> findOrder(int v, vector<vector<int>>& prerequisites) {
-          vector<vector<int>> adj(v);
+    vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites) {
+        vector<vector<int>> adj(numCourses);
 
-        for (auto it : prerequisites) {
+        for (auto &it : prerequisites) {
             adj[it[1]].push_back(it[0]);
         }
 
-        // Step 2: Indegree array
-        vector<int> indegree(v, 0);
-
-        for (int i = 0; i < v; i++) {
-            for (auto it : adj[i]) {
-                indegree[it]++;
-            }
+        vector<int> degree(numCourses , 0);
+        for(int i = 0 ; i<numCourses ; i++)
+        {
+        for(auto it:adj[i]){
+            degree[it]++;
+        }
         }
 
-        // Step 3: Queue for BFS
         queue<int> q;
-        for (int i = 0; i < v; i++) {
-            if (indegree[i] == 0) {
+        for(int i = 0 ; i<numCourses ; i++){
+            if(degree[i]==0){
                 q.push(i);
             }
         }
-
-        // Step 4: Topological sort
-        vector<int> topo;
-        while (!q.empty()) {
+        vector<int> ans;
+        while(!q.empty()){
             int node = q.front();
             q.pop();
-            topo.push_back(node);
+            ans.push_back(node);
 
-            for (auto it : adj[node]) {
-                indegree[it]--;
-                if (indegree[it] == 0) {
+            for(auto it:adj[node]){
+                degree[it]--;
+                if(degree[it]==0){
                     q.push(it);
                 }
             }
         }
-
-        // Step 5: Check if valid topo sort
-        if (topo.size() == v) return topo;
-
-        return {}; // cycle exists
+         if (ans.size() != numCourses)
+            return {};
+        return ans;
     }
 };
