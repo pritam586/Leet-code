@@ -1,0 +1,39 @@
+class Solution {
+public:
+    int shortestPath(int V, vector<vector<int>> &edges, int src, int dest) {
+
+        vector<int> adj[V];
+
+        for (auto &it : edges) {
+            adj[it[0]].push_back(it[1]);
+            adj[it[1]].push_back(it[0]);
+        }
+
+        vector<int> dist(V, INT_MAX);
+
+        queue<pair<int, int>> q;
+
+        dist[src] = 0;
+        q.push({src, 0});
+
+        while (!q.empty()) {
+
+            int node = q.front().first;
+            int d = q.front().second;
+            q.pop();
+
+            for (auto it : adj[node]) {
+
+                if (dist[it] > d + 1) {
+                    dist[it] = d + 1;
+                    q.push({it, d + 1});
+                }
+            }
+        }
+
+        if (dist[dest] == INT_MAX)
+            return -1;
+
+        return dist[dest];
+    }
+};
