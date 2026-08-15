@@ -1,56 +1,59 @@
 class Solution {
 public:
-
-    vector<int> parent, size;
-
-    int find(int x) {
-        if (parent[x] == x)
-            return x;
-
-        return parent[x] = find(parent[x]);
-    }
-
-    void unite(int a, int b) {
-        a = find(a);
-        b = find(b);
-
-        if (a == b)
-            return;
-
-        if (size[a] < size[b])
-            swap(a, b);
-
-        parent[b] = a;
-        size[a] += size[b];
+    int ultParnt(int u, vector<int>& parent) {
+        if (u == parent[u]) {
+            return u;
+        }
+        return ultParnt(parent[u], parent);
     }
 
     int makeConnected(int n, vector<vector<int>>& connections) {
+        vector<int> siz, parent;
 
-        // Not enough cables
-        if (connections.size() < n - 1)
-            return -1;
-
+        siz.resize(n, 1);
         parent.resize(n);
-        size.assign(n, 1);
 
         for (int i = 0; i < n; i++) {
             parent[i] = i;
         }
 
-        // Connect computers using existing cables
-        for (auto &edge : connections) {
-            unite(edge[0], edge[1]);
+        int count = 0;
+
+        for (int i = 0; i < connections.size(); i++) {
+            int u = connections[i][0];
+            int v = connections[i][1];
+
+            int ultp_u = ultParnt(u, parent);
+            int ultp_v = ultParnt(v, parent);
+
+            int sizu = siz[ultp_u];
+            int sizv = siz[ultp_v];
+
+            if (ultp_u == ultp_v) {
+                count++;
+            }
+            else if (sizu < sizv) {
+                parent[ultp_u] = ultp_v;
+                siz[ultp_v] += siz[ultp_u];
+            }
+            else {
+                parent[ultp_v] = ultp_u;
+                siz[ultp_u] += siz[ultp_v];
+            }
         }
 
-        // Count separate components
         int components = 0;
 
         for (int i = 0; i < n; i++) {
-            if (find(i) == i)
+            if (parent[i] == i) {
                 components++;
+            }
         }
 
-        // Need components - 1 cables to connect them
-        return components - 1;
+        if (count >= components - 1) {
+            return components - 1;
+        }
+
+        return -1;
     }
 };
