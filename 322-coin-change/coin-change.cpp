@@ -1,21 +1,33 @@
 class Solution {
 public:
+    int cal(vector<int>& coins, int amount , vector<int> & dp){
+         if (amount == 0)
+            return 0;
+
+        if (amount < 0)
+            return INT_MAX;
+
+              if (dp[amount] != -1)
+            return dp[amount];
+
+        int mini = INT_MAX;
+
+       for(auto coin:coins){
+         int value = cal(coins , amount-coin , dp);
+         if(value!=INT_MAX){
+            mini = min(mini , 1+value);
+         }
+       }
+       return dp[amount] =  mini;
+    }
     int coinChange(vector<int>& coins, int amount) {
-        if(amount<1) return 0;
+         vector<int> dp(amount + 1, -1);
 
-        vector<int> minCoinDP(amount+1);
+        int ans = cal(coins, amount, dp);
 
-        for(int i = 1; i <= amount ; i++){
-            minCoinDP[i] = INT_MAX;
-            for(auto coin : coins){
-                if(coin<=i && minCoinDP[i-coin]!=INT_MAX){
-                    minCoinDP[i] = min(minCoinDP[i] ,  1+minCoinDP[i-coin]);
-                }
-            }
-        }
+        if (ans == INT_MAX)
+            return -1;
 
-        if(minCoinDP[amount]==INT_MAX) return -1;
-
-        return minCoinDP[amount];
+        return ans;
     }
 };
