@@ -1,27 +1,26 @@
 class Solution {
 public:
+    int cal(int m, int n, vector<vector<int>>& dp, int row, int col) {
+        // Out of boundary
+        if (row >= m || col >= n)
+            return 0;
+
+        // Reached destination
+        if (row == m - 1 && col == n - 1)
+            return 1;
+
+        if (dp[row][col] != -1)
+            return dp[row][col];
+
+        int down = cal(m, n, dp, row + 1, col);
+        int right = cal(m, n, dp, row, col + 1);
+
+        return dp[row][col] = down + right;
+    }
 
     int uniquePaths(int m, int n) {
-        vector<vector<int>> dp(m , vector<int> (n));
+        vector<vector<int>> dp(m, vector<int>(n, -1));
 
-        dp[0][0] = 1;
-
-        // fill the firstn row
-        for(int i = 0 ; i < n ; i++){
-            dp[0][i] = 1;
-        }
-
-         for(int i = 0 ; i < m ; i++){
-            dp[i][0] = 1;
-        }
-
-        for(int i  = 1 ; i< m ; i++){
-            for(int j = 1 ; j<n ; j++){
-                dp[i][j] = dp[i-1][j] + dp[i][j-1];
-            }
-        }
-
-        return  dp[m-1][n-1];
-
+        return cal(m, n, dp, 0, 0);
     }
 };
