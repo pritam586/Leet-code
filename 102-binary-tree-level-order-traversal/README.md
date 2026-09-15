@@ -16,6 +16,7 @@
 <strong>Output:</strong> [[1]]
 </pre>
 
+
 <p><strong class="example">Example 3:</strong></p>
 
 <pre>
