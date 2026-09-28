@@ -1,0 +1,69 @@
+this is the brute force
+class Solution {
+public:
+    int secondLargestElement(vector<int>& nums) {
+        //your code goes here
+        sort(nums.begin() , nums.end());
+        int n = nums.size()-1;
+        int largest = nums[n];
+        while(n>=0){
+            if(nums[n]!=largest){
+                return nums[n];
+            }
+        }
+        return -1;
+      
+    }
+};
+
+this case tle because time complexity is 0(nlogn + n)
+
+
+#better approach 
+//better 
+class Solution {
+public:
+    int secondLargestElement(vector<int>& nums) {
+        //your code goes here
+        int largest = INT_MIN;
+        for(int i  = 0 ; i<nums.size() ; i++){
+            if(nums[i]>largest){
+                largest = nums[i];
+            }
+        }  
+        int secondLargest = INT_MIN;
+        for(int i = 0 ; i<nums.size() ; i++){
+            if(nums[i]>secondLargest && nums[i]!=largest){
+                secondLargest=nums[i];
+            }
+        }  
+        if(secondLargest!=INT_MIN){
+            return secondLargest;
+        }else{
+        return -1; 
+        } 
+    }
+};
+// most optimal Solution
+
+class Solution {
+public:
+    int secondLargestElement(vector<int>& nums) {
+        //your code goes here
+        int largest = nums[0];
+        int secondLargest = INT_MIN;
+        for(int i = 1 ; i<nums.size() ; i++){
+            if(nums[i]>largest){
+                secondLargest = largest;
+                largest = nums[i];
+            }else if(nums[i]>secondLargest && nums[i]!=largest){
+                secondLargest = nums[i];
+            }
+        }
+      if(secondLargest!=INT_MIN){
+            return secondLargest;
+        }else{
+        return -1; 
+        } 
+    }
+};
