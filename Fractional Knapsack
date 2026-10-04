@@ -1,0 +1,34 @@
+class Solution {
+public:
+    double fractionalKnapsack(vector<long long>& val, vector<long long>& wt, long long capacity) {
+
+        int n = val.size();
+
+        vector<pair<double, int>> order;
+
+        for (int i = 0; i < n; i++) {
+            order.push_back({(double)val[i] / wt[i], i});
+        }
+
+        sort(order.rbegin(), order.rend());
+
+        double profit = 0;
+
+        for (int i = 0; i < n; i++) {
+
+            int idx = order[i].second;
+
+            if (capacity >= wt[idx]) {
+                profit += val[idx];
+                capacity -= wt[idx];
+            }
+            else {
+                profit += ((double)val[idx] / wt[idx]) * capacity;
+                capacity = 0;
+                break;
+            }
+        }
+
+        return profit;
+    }
+};
