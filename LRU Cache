@@ -1,0 +1,100 @@
+
+class LRUCache {
+public:
+    struct Node {
+        int key, value;
+        Node* next;
+        Node* prev;
+
+        Node(int k, int v) {
+            key = k;
+            value = v;
+            next = nullptr;
+            prev = nullptr;
+        }
+    };
+
+    int cap;
+    unordered_map<int, Node*> mp;
+    Node* head;
+    Node* tail;
+
+    LRUCache(int capacity) {
+        cap = capacity;
+
+        head = new Node(-1, -1);
+        tail = new Node(-1, -1);
+
+        head->next = tail;
+        tail->prev = head;
+    }
+
+    // Remove a node from the doubly linked list
+    void deleteNode(Node* node) {
+        Node* before = node->prev;
+        Node* after = node->next;
+
+        before->next = after;
+        after->prev = before;
+    }
+
+    // Insert a node immediately after head
+    void insert(Node* node) {
+        Node* nextNode = head->next;
+
+        head->next = node;
+        node->prev = head;
+
+        node->next = nextNode;
+        nextNode->prev = node;
+    }
+
+    int get(int key) {
+        auto it = mp.find(key);
+
+        if (it == mp.end()) {
+            return -1;
+        }
+
+        Node* node = it->second;
+
+        // Mark this node as recently used
+        deleteNode(node);
+        insert(node);
+
+        return node->value;
+    }
+
+    void put(int key, int value) {
+        if (cap <= 0) {
+            return;
+        }
+
+        // If key already exists, update its value
+        auto it = mp.find(key);
+
+        if (it != mp.end()) {
+            Node* node = it->second;
+            node->value = value;
+
+            deleteNode(node);
+            insert(node);
+            return;
+        }
+
+        // If cache is full, remove least recently used node
+        if (mp.size() == cap) {
+            Node* lru = tail->prev;
+
+            mp.erase(lru->key);
+            deleteNode(lru);
+            delete lru;
+        }
+
+        // Insert the new node
+        Node* node = new Node(key, value);
+
+        mp[key] = node;
+        insert(node);
+    }
+};
